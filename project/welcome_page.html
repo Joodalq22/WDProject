@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PomoAid</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+    <section class="home" id="home">
+        <h1>Welcome to <em>PomoAid</em></h1> 
+        <p>Whether you're preparing for your next exam, or trying to submit your work before the deadline. PomoAid is your number one website to aid you in being your most productive self.</p>
+        <a href="mainPage.html"><button class="get-to-it" id="start">Get to it!</button></a>
+    </section>
+
+    <footer class="footer">
+        <p class="copyright">PomoAid by SEJ | All rights reserved</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarContainer = document.createElement('div');
+            navbarContainer.id = 'navbar-container';
+            document.body.prepend(navbarContainer);
+        
+            const navbarHTML = `
+            <header class="creative-nav">
+                <nav class="navbar">
+                    <div class="logo-container">
+                        <img src="logo.png" class="spin-on-hover" height="50" width="50" alt="PomoAid Logo">
+                        <div class="logo-pulse"></div>
+                    </div>
+                    
+                    <div class="nav-links-container">
+                        <div class="nav-links">
+                            <a href="welcome_page.html" class="nav-link">
+                                <span class="link-icon"><i class="fas fa-home"></i></span>
+                                <span class="link-text">Home</span>
+                                <div class="link-underline"></div>
+                            </a>
+                            <a href="mainPage.html" class="nav-link">
+                                <span class="link-icon">⚙️</span>
+                                <span class="link-text">Get Working</span>
+                                <div class="link-underline"></div>
+                            </a>
+                            <a href="AboutUs.html" class="nav-link">
+                                <span class="link-icon"><i class="fas fa-book"></i></span>
+                                <span class="link-text">About Us</span>
+                                <div class="link-underline"></div>
+                            </a>
+                            <a href="ConntactUS.html" class="nav-link">
+                                <span class="link-icon">✉️</span>
+                                <span class="link-text">Contact</span>
+                                <div class="link-underline"></div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="flame-streak" data-tooltip="0 day streak">
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                    </div>
+                </nav>
+            </header>`;
+            
+            navbarContainer.innerHTML = navbarHTML;
+            
+            initNavbarFeatures();
+        });
+    
+        function initNavbarFeatures() {
+    
+            initStreakCounter();        
+            highlightActiveLink();
+            setupTooltips();
+        }
+    
+        function initStreakCounter() {
+            const flameStreak = document.querySelector('.flame-streak');
+            if (!flameStreak) return;
+            let currentStreak = parseInt(localStorage.getItem('pomoaid-streak')) || 0;
+            flameStreak.setAttribute('data-tooltip', `${currentStreak} day streak`);
+            window.incrementStreak = function() {
+                const now = new Date();
+                const lastVisit = localStorage.getItem('pomoaid-last-visit');
+              
+                if (lastVisit) {
+                    const daysSinceLastVisit = Math.floor((now - new Date(lastVisit)) / (1000 * 60 * 60 * 24));
+                    if (daysSinceLastVisit > 1) {
+                        currentStreak = 0;
+                    }
+                }
+
+                const today = now.toDateString();
+                if (localStorage.getItem('pomoaid-last-increment') !== today) {
+                    currentStreak++;
+                    localStorage.setItem('pomoaid-streak', currentStreak);
+                    localStorage.setItem('pomoaid-last-increment', today);
+                    flameStreak.setAttribute('data-tooltip', `${currentStreak} day streak`);
+                    celebrateStreak(currentStreak);
+                }
+                
+                localStorage.setItem('pomoaid-last-visit', now.toString());
+            };
+        }
+    
+        function highlightActiveLink() {
+            const currentPath = window.location.pathname.split('/').pop() || 'welcome_page.html';
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (linkPath === currentPath || 
+                    (currentPath === '' && linkPath === 'welcome_page.html')) {
+                    link.classList.add('active');
+                    const underline = link.querySelector('.link-underline');
+                    if (underline) underline.style.width = '100%';
+                }
+            });
+        }
+    
+        function setupTooltips() {
+            const tooltipElements = document.querySelectorAll('[data-tooltip]');
+            tooltipElements.forEach(el => {
+                el.addEventListener('mouseenter', showTooltip);
+                el.addEventListener('mouseleave', hideTooltip);
+            });
+        }
+    
+        function showTooltip(e) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = this.getAttribute('data-tooltip');
+            document.body.appendChild(tooltip);
+            
+            const rect = this.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + rect.width/2 - tooltip.offsetWidth/2}px`;
+            tooltip.style.top = `${rect.bottom + 5}px`;
+        }
+    
+        function hideTooltip() {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.remove();
+            }
+        }
+    
+        function celebrateStreak(streak) {
+            if (streak % 5 === 0) { 
+                const flames = document.querySelectorAll('.flame');
+                flames.forEach(flame => {
+                    flame.style.animation = 'bigFlicker 0.5s 3';
+                    setTimeout(() => {
+                        flame.style.animation = 'flicker 3s ease-in-out infinite alternate';
+                    }, 1500);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
