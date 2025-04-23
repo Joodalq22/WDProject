@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>contactUs</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+    (function(){
+        emailjs.init("E2yPwFHPXHdJqQqH5"); })();
+    </script>
   
 </head>
+
 <body>
         <main>
             <div class="wave-container">
@@ -17,7 +23,7 @@
             
             <section class="contact-form">
                 <div class="form-side">
-                    <form action="/submit" method="POST">
+                    <form id="contactUS-form">
                         <div class="form-group">
                             <label for="firstName">First Name:</label>
                             <input type="text" id="firstName" name="firstName" required maxlength="30" pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed.">
@@ -67,7 +73,7 @@
                 <div class="contact-info">
                     <div class="info-item">
                         <span class="info-label">Email:</span>
-                        <span class="info-value">contactus@gmail.com</span>
+                        <span class="info-value">ContactUs@gmail.com</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Phone:</span>
@@ -222,6 +228,29 @@
                 });
             }
         }
+
+    document.getElementById("contactUS-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const form = this;
+
+    emailjs.sendForm("service_at2ujz7", "template_2q4ixem", form)
+      .then(function() {
+        console.log("Message sent to site owner");
+
+        emailjs.sendForm("service_at2ujz7", "template_9bpzb5c", form)
+          .then(function() {
+            alert("Message sent successfully, and confirmation email sent to user!");
+            form.reset();
+          }, function(error) {
+            console.error("Failed to send confirmation to user:", error);
+            alert("Message sent to site owner, but failed to send confirmation to user.");
+          });
+
+      }, function(error) {
+        console.error("Failed to send message to site owner:", error);
+        alert("There was an error sending your message. Please try again.");
+      });
+  });
     </script>
 </body>
 </html>
