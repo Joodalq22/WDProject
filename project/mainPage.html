@@ -105,8 +105,14 @@
         
         <div class="music-player-container">
             <h2>Music Player</h2>
+            
+            <div class="playlist-input">
+                <input type="text" id="playlistURL" placeholder="Paste Spotify playlist link here..." />
+                <button onclick="updatePlaylist()">Load</button>
+            </div>
+        
             <div class="music-player">
-                <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                <iframe id="spotifyPlayer" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
             </div>
         </div>
     </div>
@@ -239,7 +245,7 @@
                     flameStreak.setAttribute('data-tooltip', `${currentStreak} day streak`);
                     celebrateStreak(currentStreak);
                 }
-                // 🔥 Send to server to save streak
+              
                 fetch('/streak', {
                     method: 'POST',
                     headers: {
@@ -251,8 +257,8 @@
                     })
                 })
                 .then(response => response.json())
-                .then(data => console.log('✅ Streak saved to DB:', data))
-                .catch(err => console.error('❌ Failed to save streak:', err));
+                .then(data => console.log('Streak saved to DB:', data))
+                .catch(err => console.error('Failed to save streak:', err));
 
                 localStorage.setItem('pomoaid-last-visit', now.toString());
             };
@@ -308,6 +314,21 @@
                 });
             }
         }
+
+        function updatePlaylist() {
+            const url = document.getElementById("playlistURL").value;
+            const match = url.match(/(playlist|album|track)\/([a-zA-Z0-9]+)/);
+            
+            if (match) {
+                const type = match[1];
+                const id = match[2];
+                const embedURL = `https://open.spotify.com/embed/${type}/${id}`;
+                document.getElementById("spotifyPlayer").src = embedURL;
+            } else {
+                alert("Please enter a valid Spotify playlist, album, or track URL.");
+            }
+        }
+        
         document.addEventListener("DOMContentLoaded", function () {
             const sidebar = document.getElementById("sidebar");
             const toggleBtn = document.getElementById("toggleBtn");
@@ -330,7 +351,7 @@
 
             toggleBtn.addEventListener("click", function() {
     sidebar.classList.toggle("closed");
-    // Change icon based on state
+    
     toggleBtn.innerHTML = sidebar.classList.contains("closed") 
         ? '<i class="fas fa-bars"></i>' 
         : '<i class="fas fa-times"></i>';

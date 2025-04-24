@@ -364,6 +364,9 @@ td a:hover {
     transition: transform 0.3s ease-in-out;
     transform: translateX(0);
     z-index: 100;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #E06712 transparent;
 }
 
 .sidebar.closed {
@@ -551,6 +554,7 @@ td a:hover {
     font-size: 0.9rem;
 }
 
+
 .ambient-slider {
     width: 60%;
     height: 6px;
@@ -584,6 +588,34 @@ td a:hover {
     width: 100%;
     height: 100%;
     border: none;
+}
+.playlist-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.playlist-input input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.playlist-input button {
+    padding: 8px 12px;
+    background: #E06712;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.playlist-input button:hover {
+    background: #c4560d;
 }
 
 .todo-container {
