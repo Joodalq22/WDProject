@@ -365,7 +365,7 @@ td a:hover {
     transform: translateX(0);
     z-index: 100;
     overflow-y: auto;
-    scrollbar-width: thin; /* Firefox */
+    scrollbar-width: thin;
     scrollbar-color: #E06712 transparent;
 }
 
@@ -401,7 +401,7 @@ td a:hover {
     border-bottom: 1px solid #E06712;
 }
 
-/* Icon Container Styles */
+
 .icon-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

@@ -71,12 +71,6 @@
                 <i class="fas fa-users"></i>
             </div>
         </div>
-        
-        <h2>Sound</h2>
-        <div class="sound-controls">
-            <button id="muteBtn" class="sound-btn"><i class="fas fa-volume-up"></i></button>
-            <input type="range" id="volumeSlider" min="0" max="100" value="50">
-        </div>
          
        
         <button id="timerToggleBtn" class="timer-toggle-btn">
@@ -252,7 +246,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        visit_date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                        visit_date: new Date().toISOString().split('T')[0],
                         current_streak: currentStreak
                     })
                 })
@@ -277,13 +271,7 @@
             });
         }
     
-        function setupTooltips() {
-            const tooltipElements = document.querySelectorAll('[data-tooltip]');
-            tooltipElements.forEach(el => {
-                el.addEventListener('mouseenter', showTooltip);
-                el.addEventListener('mouseleave', hideTooltip);
-            });
-        }
+
     
         function showTooltip(e) {
             const tooltip = document.createElement('div');
@@ -328,7 +316,7 @@
                 alert("Please enter a valid Spotify playlist, album, or track URL.");
             }
         }
-        
+
         document.addEventListener("DOMContentLoaded", function () {
             const sidebar = document.getElementById("sidebar");
             const toggleBtn = document.getElementById("toggleBtn");

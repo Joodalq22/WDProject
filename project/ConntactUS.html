@@ -95,7 +95,6 @@
 
     const form = this;
     
-    // Extract field values
     const data = {
       firstName: document.getElementById('firstName').value.trim(),
       lastName: document.getElementById('lastName').value.trim(),
@@ -108,7 +107,7 @@
     };
 
     try {
-      // 1️⃣ Send to your backend to save in the database
+      
       const dbResponse = await fetch('/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -119,10 +118,7 @@
         throw new Error("Database submission failed.");
       }
 
-      // 2️⃣ Send email to site owner
       await emailjs.sendForm("service_at2ujz7", "template_2q4ixem", form);
-
-      // 3️⃣ Send confirmation email to user
       await emailjs.sendForm("service_at2ujz7", "template_9bpzb5c", form);
 
       alert("Your message was sent and saved successfully!");
