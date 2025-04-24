@@ -617,36 +617,54 @@ td a:hover {
 }
 
 .todo-list {
+    padding: 0;
+    margin: 0;
     list-style: none;
-    margin-bottom: 10px;
-    max-height: 300px;
-    overflow-y: auto;
 }
-
 .todo-list li {
     display: flex;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.todo-list li input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-.todo-list li span {
-    flex: 1;
+    align-items: flex-start; 
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    color: #fff;
+    flex-wrap: wrap;
     word-break: break-word;
-}
-
-.todo-list li button {
+  }
+  
+  .todo-list li .task-text {
+    flex-grow: 1;
+    font-size: 16px;
+    line-height: 1.4;
+    margin-top: 2px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  
+  .todo-list li button {
     background: none;
     border: none;
-    color: #E06712;
+    color: orange;
+    margin-left: 8px;
     cursor: pointer;
-    margin-left: 5px;
-    font-size: 0.8rem;
-}
+    font-size: 16px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .todo-list li input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    accent-color: orange;
+  }
+    
+  .todo-list li i {
+    pointer-events: none;
+    font-size: 16px;
+  }
 
 .add-todo {
     display: flex;

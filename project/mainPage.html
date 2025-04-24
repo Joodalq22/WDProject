@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&amp;display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
 </head>
 <body>
     <div class="background-container">
@@ -100,7 +100,15 @@
     <p id="pomodoro-status">Work Time!</p>
 </div>
     <div id="todoListsContainer" style="position: absolute; right: 20px; top: 100px;"></div>
-
+    <ul class="todo-list">
+        <li>
+          <input type="checkbox">
+          <span class="task-text">Sample Task</span>
+          <button class="edit"><i class="fas fa-edit"></i></button>
+          <button class="delete"><i class="fas fa-trash"></i></button>
+        </li>
+      </ul>
+      
     <audio id="audioRain" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-1246.mp3" type="audio/mp3"></audio>
     <audio id="audioFireplace" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-crackling-fireplace-1330.mp3" type="audio/mp3"></audio>
     <audio id="audioCafe" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-busy-coffee-shop-1250.mp3" type="audio/mp3"></audio>
@@ -320,9 +328,13 @@
                 videoBackground.style.display = "block";
             });
 
-            newTodoListBtn.addEventListener("click", function () {
+                newTodoListBtn.addEventListener("click", function () {
                 const newTodoContainer = document.createElement("div");
                 newTodoContainer.className = "todo-container";
+                newTodoContainer.style.position = "absolute";
+                newTodoContainer.style.left = "100px";
+                newTodoContainer.style.top = "100px";
+                newTodoContainer.style.zIndex = 1000;
 
                 const todoTitle = document.createElement("h3");
                 todoTitle.innerHTML = 'To-Do List <i class="fas fa-trash delete-list-icon" style="cursor: pointer; color: #E06712;"></i>';
@@ -378,40 +390,43 @@
 
                 newTodoContainer.appendChild(addTodo);
                 todoListsContainer.appendChild(newTodoContainer);
-
                 todoInput.focus();
 
-                dragElement(newTodoContainer);
+                dragElement(newTodoContainer); 
             });
 
-            function dragElement(el) {
-                let pos1 = 0, pos3 = 0;
-                let isDragging = false;
 
-                el.onmousedown = function (e) {
+            function dragElement(el) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+                el.style.position = 'absolute'; 
+                el.onmousedown = dragMouseDown;
+
+                function dragMouseDown(e) {
+                    if (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON" || e.target.tagName === "TEXTAREA") return; // avoid interrupting input
                     e.preventDefault();
-                    isDragging = true;
                     pos3 = e.clientX;
+                    pos4 = e.clientY;
                     document.onmouseup = closeDragElement;
                     document.onmousemove = elementDrag;
-                };
+                }
 
                 function elementDrag(e) {
-                    if (isDragging) {
-                        e.preventDefault();
-                        const pos2 = pos3 - e.clientX; t
-                        pos3 = e.clientX;
-                        el.style.left = (el.offsetLeft - pos2) + "px"; 
-                    }
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    el.style.top = (el.offsetTop - pos2) + "px";
+                    el.style.left = (el.offsetLeft - pos1) + "px";
                 }
 
                 function closeDragElement() {
-                    isDragging = false;
                     document.onmouseup = null;
                     document.onmousemove = null;
                 }
             }
-            
+
             document.querySelectorAll('.ambient-slider').forEach(slider => {
                 slider.addEventListener('input', function() {
                     let sound = document.getElementById('audio' + this.id.charAt(0).toUpperCase() + this.id.slice(1));
