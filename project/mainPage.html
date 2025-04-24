@@ -1,23 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PomoAid</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous">
 </head>
-<body>
+<body><div id="navbar-container">
+            <header class="creative-nav">
+                <nav class="navbar">
+                    <div class="logo-container">
+                        <img src="logo.png" class="spin-on-hover" height="50" width="50" alt="PomoAid Logo">
+                        <div class="logo-pulse"></div>
+                    </div>
+                    
+                    <div class="nav-links-container">
+                        <div class="nav-links">
+                            <a href="welcome_page.html" class="nav-link">
+                                <span class="link-icon"><i class="fas fa-home"></i></span>
+                                <span class="link-text">Home</span>
+                                <div class="link-underline"></div>
+                            </a>
+                            <a href="mainPage.html" class="nav-link active">
+                                <span class="link-icon">⚙️</span>
+                                <span class="link-text">Get Working</span>
+                                <div class="link-underline" style="width: 100%;"></div>
+                            </a>
+                            <a href="AboutUs.html" class="nav-link">
+                                 <span class="link-icon"><i class="fas fa-book"></i></span>
+                                <span class="link-text">About Us</span>
+                                <div class="link-underline"></div>
+                            </a>
+                            <a href="ConntactUS.html" class="nav-link">
+                                <span class="link-icon">✉️</span>
+                                <span class="link-text">Contact Us</span>
+                                <div class="link-underline"></div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="flame-streak" data-tooltip="0 day streak">
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                        <div class="flame"></div>
+                    </div>
+                </nav>
+            </header></div>
     <div class="background-container">
         <iframe id="videoBackground" class="videoBackground" src="https://www.youtube.com/embed/s_m1QKaQXVc?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=s_m1QKaQXVc&amp;controls=0&amp;showinfo=0&amp;modestbranding=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
         <iframe id="videoBackground1" class="videoBackground" src="https://www.youtube.com/embed/z9Ug-3qhrwY?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=z9Ug-3qhrwY&amp;controls=0&amp;showinfo=0&amp;modestbranding=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
     </div>
     <div id="sidebar" class="sidebar">
-        <button id="toggleBtn" class="toggle-btn">
-            <i class="fas fa-chevron-left"></i>
-        </button>
+        
         <h2>Spaces</h2>
         <div class="icon-container">
             <div class="icon" data-tooltip="Library" id="libraryBtn">
@@ -75,8 +110,11 @@
             </div>
         </div>
     </div>
+    <button id="toggleBtn" class="toggle-btn">
+        <i class="fas fa-bars"></i>
+    </button>
 
-<div class="pomodoro-widget" id="pomodoroWidget">
+<div class="pomodoro-widget" id="pomodoroWidget" style="cursor: grab;">
     <button class="close-widget" id="closeWidget"><i class="fas fa-times"></i></button>
     <h2>Pomodoro Timer</h2>
     <div class="timer">
@@ -109,10 +147,10 @@
         </li>
       </ul>
       
-    <audio id="audioRain" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-1246.mp3" type="audio/mp3"></audio>
-    <audio id="audioFireplace" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-crackling-fireplace-1330.mp3" type="audio/mp3"></audio>
-    <audio id="audioCafe" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-busy-coffee-shop-1250.mp3" type="audio/mp3"></audio>
-    <audio id="audioOcean" loop><source src="https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-loop-1244.mp3" type="audio/mp3"></audio>
+    <audio id="audioRain" loop=""><source src="https://assets.mixkit.co/sfx/preview/mixkit-rain-loop-1246.mp3" type="audio/mp3"></audio>
+    <audio id="audioFireplace" loop=""><source src="https://assets.mixkit.co/sfx/preview/mixkit-crackling-fireplace-1330.mp3" type="audio/mp3"></audio>
+    <audio id="audioCafe" loop=""><source src="https://assets.mixkit.co/sfx/preview/mixkit-busy-coffee-shop-1250.mp3" type="audio/mp3"></audio>
+    <audio id="audioOcean" loop=""><source src="https://assets.mixkit.co/sfx/preview/mixkit-ocean-waves-loop-1244.mp3" type="audio/mp3"></audio>
     
     <script>
         
@@ -201,7 +239,21 @@
                     flameStreak.setAttribute('data-tooltip', `${currentStreak} day streak`);
                     celebrateStreak(currentStreak);
                 }
-                
+                // 🔥 Send to server to save streak
+                fetch('/streak', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        visit_date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+                        current_streak: currentStreak
+                    })
+                })
+                .then(response => response.json())
+                .then(data => console.log('✅ Streak saved to DB:', data))
+                .catch(err => console.error('❌ Failed to save streak:', err));
+
                 localStorage.setItem('pomoaid-last-visit', now.toString());
             };
         }
@@ -276,12 +328,13 @@
 
             let isMuted = false;
 
-            toggleBtn.addEventListener("click", function () {
-                sidebar.classList.toggle("closed");
-                toggleBtn.innerHTML = sidebar.classList.contains("closed") 
-                    ? '<i class="fas fa-chevron-right"></i>' 
-                    : '<i class="fas fa-chevron-left"></i>';
-            });
+            toggleBtn.addEventListener("click", function() {
+    sidebar.classList.toggle("closed");
+    // Change icon based on state
+    toggleBtn.innerHTML = sidebar.classList.contains("closed") 
+        ? '<i class="fas fa-bars"></i>' 
+        : '<i class="fas fa-times"></i>';
+});
 
              timerToggleBtn.addEventListener("click", function () {
                 pomodoroWidget.style.display = pomodoroWidget.style.display === "none" ? "block" : "none";
@@ -467,37 +520,37 @@
             }
 
             function updateTimer() {
-                if (isWorkTime) {
-                    workTime--;
-                } else {
-                    breakTime--;
-                }
+    if (isWorkTime) {
+        workTime--;
+    } else {
+        breakTime--;
+    }
 
-                updateDisplay();
+    updateDisplay();
 
-                if ((isWorkTime && workTime === 0) || (!isWorkTime && breakTime === 0)) {
-                    clearInterval(timerInterval);
-                    if (isWorkTime) {
-                        isWorkTime = false;
-                        workTime = parseInt(workTimeInput.value) * 60;
-                        pomodoroStatus.textContent = 'Break Time!';
-                    } else {
-                        isWorkTime = true;
-                        breakTime = parseInt(breakTimeInput.value) * 60;
-                        pomodoroStatus.textContent = 'Work Time!';
-                    }
-                    startTimer();
-                }
-            }
+    if ((isWorkTime && workTime === 0) || (!isWorkTime && breakTime === 0)) {
+        clearInterval(timerInterval);
+        if (isWorkTime) {
+            isWorkTime = false;
+            workTime = parseInt(workTimeInput.value) * 60;
+            pomodoroStatus.textContent = 'Break Time!';
+        } else {
+            isWorkTime = true;
+            breakTime = parseInt(breakTimeInput.value) * 60;
+            pomodoroStatus.textContent = 'Work Time!';
+        }
+        
+        timerInterval = setInterval(updateTimer, 1000);
+        isPaused = false;
+    }
+}
 
-            function startTimer() {
-                if (isPaused) {
-                    timerInterval = setInterval(updateTimer, 1000);
-                    isPaused = false;
-                    startButton.disabled = true;
-                    pauseButton.disabled = false;
-                }
-            }
+function startTimer() {
+    if (isPaused) {
+        timerInterval = setInterval(updateTimer, 1000);
+        isPaused = false;
+    }
+}
 
             function pauseTimer() {
                 clearInterval(timerInterval);
@@ -548,5 +601,6 @@
             });
         });
     </script>
+
 </body>
 </html>

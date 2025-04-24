@@ -356,17 +356,14 @@ td a:hover {
 .sidebar {
     position: fixed;
     left: 0;
-    top: 70px;
-    height: calc(100vh - 70px);
+    top: 0;
+    height: 100%;
     width: 250px;
-    background: rgba(0, 0, 0, 0.7);
+    background: #612B14;
     padding: 20px;
-    transition: transform 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(0);
+    z-index: 100;
 }
 
 .sidebar.closed {
@@ -374,25 +371,23 @@ td a:hover {
 }
 
 .toggle-btn {
-    position: absolute;
-    top: 20px;
-    right: -40px;
+    position: fixed;
+    top: 50%; 
+    left: 270px; 
+    transform: translateY(-50%); 
     background: #E06712;
     color: white;
     border: none;
-    padding: 10px;
-    border-radius: 0 5px 5px 0;
+    padding: 12px;
+    border-radius: 50%;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
 }
 
-.toggle-btn:hover {
-    background: #c4560d;
+.sidebar.closed + .toggle-btn {
+    left: 20px; /* Position when sidebar is closed */
 }
 
 .sidebar h2 {
@@ -846,7 +841,7 @@ input, select, textarea {
 }
 
 button[type="submit"] {
-    background-color: #E06712;
+    background-color: #ff9d00;
     color: white;
     border: none;
     border-radius: 4px;
@@ -865,7 +860,7 @@ button[type="submit"]:hover {
 
 .info-side {
     flex: 1; 
-    background-color: #E06712; 
+    background-color: #ff9d00; 
     color: white;
     padding: 40px; 
     border-radius: 10px; 
