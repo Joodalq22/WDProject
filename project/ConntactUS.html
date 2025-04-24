@@ -89,6 +89,49 @@
     </footer>
    
     <script>
+       
+    document.getElementById('contactUS-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const form = this;
+    
+    // Extract field values
+    const data = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      gender: document.getElementById('gender').value,
+      mobile: document.getElementById('mobile').value.trim(),
+      dob: document.getElementById('dob').value,
+      email: document.getElementById('email').value.trim(),
+      lang: document.getElementById('lang').value,
+      message: document.getElementById('message').value.trim()
+    };
+
+    try {
+      // 1️⃣ Send to your backend to save in the database
+      const dbResponse = await fetch('/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (!dbResponse.ok) {
+        throw new Error("Database submission failed.");
+      }
+
+      // 2️⃣ Send email to site owner
+      await emailjs.sendForm("service_at2ujz7", "template_2q4ixem", form);
+
+      // 3️⃣ Send confirmation email to user
+      await emailjs.sendForm("service_at2ujz7", "template_9bpzb5c", form);
+
+      alert("Your message was sent and saved successfully!");
+      form.reset();
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("There was an error. Please try again later.");
+    }
+  });
         document.addEventListener('DOMContentLoaded', function() {
             const navbarContainer = document.createElement('div');
             navbarContainer.id = 'navbar-container';
@@ -229,28 +272,7 @@
             }
         }
 
-    document.getElementById("contactUS-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    const form = this;
-
-    emailjs.sendForm("service_at2ujz7", "template_2q4ixem", form)
-      .then(function() {
-        console.log("Message sent to site owner");
-
-        emailjs.sendForm("service_at2ujz7", "template_9bpzb5c", form)
-          .then(function() {
-            alert("Message sent successfully, and confirmation email sent to user!");
-            form.reset();
-          }, function(error) {
-            console.error("Failed to send confirmation to user:", error);
-            alert("Message sent to site owner, but failed to send confirmation to user.");
-          });
-
-      }, function(error) {
-        console.error("Failed to send message to site owner:", error);
-        alert("There was an error sending your message. Please try again.");
-      });
-  });
+    
     </script>
 </body>
 </html>

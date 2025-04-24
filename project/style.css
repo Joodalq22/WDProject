@@ -846,7 +846,7 @@ input, select, textarea {
 }
 
 button[type="submit"] {
-    background-color: #ff9d00;
+    background-color: #E06712;
     color: white;
     border: none;
     border-radius: 4px;
@@ -865,7 +865,7 @@ button[type="submit"]:hover {
 
 .info-side {
     flex: 1; 
-    background-color: #ff9d00; 
+    background-color: #E06712; 
     color: white;
     padding: 40px; 
     border-radius: 10px; 
