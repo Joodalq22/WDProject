@@ -11,9 +11,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'project')));
 
+// 💾 Open the database
 const db = new sqlite3.Database('./todo.db');
 
-// ✅ Create all tables inside serialize
+// ✅ Create all tables
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS contacts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +41,10 @@ db.serialize(() => {
     duration INTEGER,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )`);
+
+  console.log("Tables created");
 });
+
 
 app.post('/contact', (req, res) => {
   const { firstName, lastName, gender, mobile, dob, email, lang, message } = req.body;
@@ -70,7 +74,6 @@ app.post('/streak', (req, res) => {
   });
 });
 
-
 app.post('/session', (req, res) => {
   const { type, duration } = req.body;
   db.run(`INSERT INTO sessions (type, duration) VALUES (?, ?)`, 
@@ -84,4 +87,18 @@ app.post('/session', (req, res) => {
   });
 });
 
-app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
+
+app.get('/check', (req, res) => {
+  db.all("SELECT name FROM sqlite_master WHERE type='table'", [], (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Failed to check tables.");
+    }
+    res.json(rows);
+  });
+});
+
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
